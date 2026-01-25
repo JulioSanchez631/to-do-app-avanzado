@@ -1,0 +1,50 @@
+<section>
+  
+  <div class="contenedor-boton-cerrar-sesion">
+    
+    <button (click)="cerrarSesion()">
+        <span class="material-symbols-outlined"> logout </span>
+    </button>
+
+  </div>
+
+  <h2>Filtros</h2>
+
+  <form class="filtros-formulario">
+    <select id="prioridad">
+      <!-- <button><selectedcontent>g</selectedcontent></button> -->
+      <option value="alta">Alta</option>
+      <option value="media">Media</option>
+      <option value="baja">Baja</option>
+    </select>
+
+    <select id="estado">
+      <option value="completadas">Completadas</option>
+      <option value="pendientes">Pendientes</option>
+      <option value="todas">Todas</option>
+    </select>
+
+    <input type="submit" value="Filtrar">
+  </form>
+
+  <ul class="lista-tareas">
+
+    @for(tarea of tareas(); track tarea.id){
+
+      <li class="item-tarea" [routerLink]="['/tareas/edit' , tarea.id]">
+        <span>
+        <!-- <emoji-mart set="apple"></emoji-mart> -->
+        {{ tarea.emoji }}
+      </span>
+      <p>{{ tarea.titulo }}</p>
+    </li>
+
+    }
+  
+    <button id="agregarTarea" routerLink="/tareas/new">
+      +
+    </button>
+
+  </ul>
+
+</section>

@@ -1,0 +1,96 @@
+<section id="formulario-componente">
+  
+  @if(this.IDtareaItem()){
+    <h2>Editar tarea</h2>
+  }@else{
+    <h2>Crear tarea</h2>
+  }
+  
+  <form [formGroup]="formulario">
+
+    <!--  (click)="crearTarea()"  -->
+
+    <div class="inputs-contenedor">
+
+      <input formControlName="titulo" type="text" placeholder="Título...">
+      @if(this.formulario.get('titulo')?.hasError('required') && this.formulario.touched){
+        <small>El título es requerido</small>
+      }
+      
+    </div>
+
+
+    <div class="inputs-contenedor">
+      <textarea formControlName="descripcion" id="descripcion"></textarea>
+    </div>
+
+    <div class="inputs-contenedor">
+
+      <select id="prioridad" formControlName="prioridad">
+        <option value="alta">Alta</option>
+        <option value="media">Media</option>
+        <option value="baja">Baja</option>
+      </select>
+      @if(this.formulario.get('prioridad')?.hasError('required') && this.formulario.touched){
+        <small>Prioridad es requerida</small>
+      }
+
+    </div>
+
+
+    <div class="inputs-contenedor">
+      <input type="date" disabled>
+
+    </div>
+  
+    <div class="inputs-contenedor input-emoji">
+
+      <input 
+      type="text"
+      formControlName="emoji"
+      (click)="activadorPicker()" readonly
+      placeholder="Elegi un emoji...">
+      @if(this.formulario.get('emoji')?.hasError('required') && this.formulario.touched){
+        <small>Emoji es requerido</small>
+      }
+
+    </div>
+
+    @if(this.IDtareaItem()){
+      <div class="inputs-contenedor eliminar-tarea-contenedor" (click)="eliminarTarea()">
+        <button>Eliminar tarea</button>
+      </div>
+    }
+
+  
+    @if(this.mostrarPicker()){
+      <!-- <div class="contenedor-picker"> -->
+        <emoji-mart 
+            (emojiSelect)="valorEmoji($event)"
+            [showPreview]="false"
+            [enableSearch]="true"
+            title="Selecciona un icono">
+          </emoji-mart>
+      <!-- </div> -->
+    }
+  
+    
+
+    <div class="contenedor-opciones">
+      
+      @if(this.IDtareaItem()){
+        <input 
+        type="submit" 
+        value="Editar Tarea" (click)="editarTarea()">
+      }@else{
+        <input 
+        type="submit" 
+        value="Crear tarea" (click)="crearTarea()">
+      }
+
+      <button type="button" routerLink="/tareas">Cancelar</button>
+    </div>
+  
+  </form>
+
+</section>

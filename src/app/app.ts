@@ -1,6 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],

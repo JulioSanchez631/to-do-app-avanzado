@@ -1,0 +1,122 @@
+section{
+  height: 100dvh;
+  background-color: var(--color-2);
+}
+
+button{
+  background-color: transparent;
+  border:none;
+  margin:8px;
+}
+
+.contenedor-boton-cerrar-sesion{
+  text-align: end;
+}
+
+span{
+  font-size:40px;
+}
+
+h2{
+  text-align: center;
+  margin:0px 0px 20px 0px;
+}
+
+.filtros-formulario{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  gap:12px
+}
+
+select,
+::picker(select){
+  appearance: base-select;
+}
+
+/* ::picker(select){
+  background-color: red;
+} */
+
+select{
+  display:flex;
+  background-color: var(--color-0);
+  padding:12px;
+  text-align: center;
+}
+
+select option{
+  padding:8px;
+  /* border:1px solid black; */
+  text-align: center;
+}
+
+.filtros-formulario input, .filtros-formulario select{
+  width: 80%;
+  font-size:18px;
+  text-align: center;
+  border-radius:12px;
+}
+
+.filtros-formulario input{
+  padding:8px;
+  background-color: var(--color-1);
+  color:var(--color-0);
+  font-weight: bold;
+}
+
+button#agregarTarea{
+  position:absolute;
+  top:88%;
+  left:80%;
+  background-color: var(--color-1);
+  color:var(--color-0);
+  padding:12px 18px;
+  font-size:30px;
+  border:1px solid black;
+  border-radius: 100%;
+  cursor: pointer;
+}
+
+/* Item de cada tarea */
+
+.lista-tareas{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  margin:20px 0 0 0;
+  list-style-type: none;
+  gap:18px;
+  overflow:auto;
+  height: 50dvh;
+  /* position:relative; */
+}
+
+.item-tarea{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  background-color: var(--color-0);
+  width: 80%;
+  border-radius:12px;
+  min-height: 60px;
+}
+
+.item-tarea > *{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item-tarea > :first-child{
+  flex-basis: 20%;
+}
+
+.item-tarea > :nth-child(2){
+  flex-basis: 80%;
+}
+
+.item-tarea span{
+  font-size:2rem;
+}

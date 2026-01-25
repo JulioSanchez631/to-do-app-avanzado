@@ -1,0 +1,37 @@
+<section>
+  
+  <h1>Iniciar sesión</h1>
+  
+  <form (submit)="enviar($event)" [formGroup]="loginForm">
+  
+    <div class="contenedor-input">
+      <span class="material-symbols-outlined">mail</span>
+      <input formControlName="email" type="email" placeholder="E-mail...">
+    
+      @if(this.loginForm.touched && this.loginForm.get('email')?.errors?.['required']){
+        <small>Debes de colocar un correo</small>
+      }@else if (this.loginForm.get('email')?.errors?.['email'] && this.loginForm.touched){
+        <small>Debe de ser un email valido</small>
+      }
+
+    </div>
+    
+    <!----------->
+  
+    <div class="contenedor-input">
+      <span class="material-symbols-outlined">lock</span>
+      <input formControlName="password" type="password" placeholder="Contraseña...">
+    
+      @if(this.loginForm.get('password')?.errors?.['required'] && this.loginForm.touched){
+        <small>La contraseña es obligatoria</small>
+      }
+
+    </div>
+
+    <input type="submit" value="Iniciar Sesión">
+  
+  </form>
+
+  <p>¿No tienes una cuenta? <a routerLink="/autenticacion/inscribirse">Crear cuenta</a></p>
+
+</section>
