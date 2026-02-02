@@ -1,4 +1,4 @@
-import { Component, inject, PLATFORM_ID, signal } from '@angular/core';
+import { Component, inject, PLATFORM_ID, signal, ViewChild, viewChild, ElementRef } from '@angular/core';
 import { Autenticacion } from '../../../services/auth/autenticacion';
 import { Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
@@ -8,15 +8,56 @@ import { TareasData } from '../../../services/dataAccess/tareas-data';
 import { tarea } from '../../../interfaces/tarea.interface';
 import { isPlatformBrowser } from '@angular/common';
 
+import { Loading } from '../../utils/loading/loading';
+import { FiltroServicio } from '../../../services/filtros/filtro-servicio';
+
+import { LucideAngularModule, 
+  FileIcon, 
+  PawPrintIcon /* pata de perro */, 
+  HouseIcon,
+  HamIcon /* Pedazo de carne */,
+  NotebookIcon,
+  PencilIcon,
+  CircleDollarSignIcon,
+  UserRoundIcon,
+  BicepsFlexedIcon,
+  ShirtIcon,
+  SunIcon,
+  CloudIcon,
+  ThermometerIcon /* Termometro */,
+  DumbbellIcon /* Pesas */,
+  PhoneCallIcon
+} 
+from 'lucide-angular';
+
 @Component({
   selector: 'app-lista-tareas',
-  imports: [RouterLink],
+  imports: [RouterLink, Loading, LucideAngularModule],
   templateUrl: './lista-tareas.html',
   styleUrl: './lista-tareas.css',
 })
 export default class ListaTareas {
 
+  readonly fileIcon = FileIcon;
+  readonly pawPrintIcon = PawPrintIcon;
+  readonly houseIcon = HouseIcon;
+  readonly hamIcon = HamIcon;
+  readonly notebookIcon = NotebookIcon;
+  readonly pencilIcon = PencilIcon;
+  readonly circleDollarSignIcon = CircleDollarSignIcon;
+  readonly userRoundIcon = UserRoundIcon;
+  readonly bicepsFlexedIcon = BicepsFlexedIcon;
+  readonly shirtIcon = ShirtIcon;
+  readonly sunIcon = SunIcon;
+  readonly cloudIcon = CloudIcon;
+  readonly thermometerIcon = ThermometerIcon;
+  readonly dumbbellIcon = DumbbellIcon;
+  readonly phoneCallIcon = PhoneCallIcon;
+
+  loading = signal<boolean>(true);
+
   authServicio = inject(Autenticacion);
+  filtrosServicio = inject(FiltroServicio);
   router = inject(Router);
 
   private plataformID = inject(PLATFORM_ID);
@@ -24,18 +65,21 @@ export default class ListaTareas {
   tareasServicio = inject(TareasData);
   public tareas = signal<tarea[]>([]);
 
+  @ViewChild('priori') selectPrioridad !: ElementRef<HTMLSelectElement>
+  @ViewChild('state') selectEstado !: ElementRef<HTMLSelectElement>
+
   async ngOnInit(){
     
     if(isPlatformBrowser(this.plataformID)){
 
-      const listaTareas : tarea[] = await this.tareasServicio.obtenerTareasLista() as tarea[];
+      const listaTareas = await this.tareasServicio.obtenerTareasLista();
+
+      this.loading.set(false);
 
       this.tareas.set(listaTareas);
-      
-      // console.log(listaTareas);
-      // console.log(this.tareas());
-    }
 
+      console.log(this.tareas());
+    }
   }
 
   cerrarSesion(){
@@ -48,6 +92,15 @@ export default class ListaTareas {
 
     this.authServicio.cerrarSesion();
     this.router.navigate(['/autenticacion/iniciarSesion']);
+  }
+
+  async ejecutarFiltrado(){
+    const selectEstado = this.selectEstado.nativeElement.value;
+    const selectPrioridad = this.selectPrioridad.nativeElement.value;
+
+    const tareasFiltradas = await this.filtrosServicio.filtrado(selectEstado, selectPrioridad);
+
+    this.tareas.set(tareasFiltradas);
   }
 
 }

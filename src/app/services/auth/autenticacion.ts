@@ -3,6 +3,8 @@ import { Auth, authState } from '@angular/fire/auth';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { Observable } from 'rxjs';
 
+import { toast } from 'ngx-sonner';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -11,8 +13,15 @@ export class Autenticacion {
 
   user$ : Observable<any> = authState(this._autenticacion);
 
+  usuarioActual(){
+    const valor = this._autenticacion.currentUser?.uid
+
+    // console.log(valor);
+    return valor;
+  }
+
   iniciarSesion(email : string, pwd : string){
-    return signInWithEmailAndPassword(this._autenticacion, email, pwd);
+      return signInWithEmailAndPassword(this._autenticacion, email, pwd);
   }
 
   inscribirse(email : string, pwd : string){
@@ -21,6 +30,9 @@ export class Autenticacion {
   }
 
   cerrarSesion(){
+    // toast('Se cerro la sesión correctamente.');
+    toast.info('Se cerro la sesión correctamente.');
+
     return signOut(this._autenticacion);
   }
 

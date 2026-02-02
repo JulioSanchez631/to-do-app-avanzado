@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 
+import { RenderMode } from '@angular/ssr';
+
 export default [
     {
         path: 'new',
@@ -7,6 +9,7 @@ export default [
     },
     {
         path: 'edit/:tareaID',
+        RenderMode: RenderMode.Client,
         loadComponent: () => import('./formulario/formulario')
     },
     {

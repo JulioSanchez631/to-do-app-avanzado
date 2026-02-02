@@ -66,6 +66,7 @@ select option{
 }
 
 button#agregarTarea{
+  z-index:1;
   position:absolute;
   top:88%;
   left:80%;
@@ -96,7 +97,7 @@ button#agregarTarea{
   display:flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid black;
+  border: 3px solid black;
   background-color: var(--color-0);
   width: 80%;
   border-radius:12px;
@@ -119,4 +120,16 @@ button#agregarTarea{
 
 .item-tarea span{
   font-size:2rem;
+}
+
+.alta{
+  border:3px solid #edb2b2;
+}
+
+.media{
+  border:3px solid #edeab2;
+}
+
+.baja{
+  border:3px solid #b2edc5;
 }

@@ -9,28 +9,90 @@ import { Router, RouterLink } from '@angular/router';
 import { tarea } from '../../../interfaces/tarea.interface';
 
 import { ActivatedRoute } from '@angular/router';
+import { Autenticacion } from '../../../services/auth/autenticacion';
+
+import { Loading } from '../../utils/loading/loading';
+
+import { LucideAngularModule, 
+  FileIcon, 
+  PawPrintIcon /* pata de perro */, 
+  HouseIcon,
+  HamIcon /* Pedazo de carne */,
+  NotebookIcon,
+  PencilIcon,
+  CircleDollarSignIcon,
+  UserRoundIcon,
+  BicepsFlexedIcon,
+  ShirtIcon,
+  SunIcon,
+  CloudIcon,
+  ThermometerIcon /* Termometro */,
+  DumbbellIcon /* Pesas */,
+  PhoneCallIcon
+} 
+from 'lucide-angular';
 
 @Component({
   selector: 'app-formulario',
-  imports: [PickerComponent, ReactiveFormsModule, RouterLink],
+  imports: [PickerComponent, ReactiveFormsModule, RouterLink, Loading, LucideAngularModule],
   templateUrl: './formulario.html',
   styleUrl: './formulario.css',
 })
 export default class Formulario {
 
-  public router = inject(Router);
+  readonly fileIcon = FileIcon;
+  readonly pawPrintIcon = PawPrintIcon;
+  readonly houseIcon = HouseIcon;
+  readonly hamIcon = HamIcon;
+  readonly notebookIcon = NotebookIcon;
+  readonly pencilIcon = PencilIcon;
+  readonly circleDollarSignIcon = CircleDollarSignIcon;
+  readonly userRoundIcon = UserRoundIcon;
+  readonly bicepsFlexedIcon = BicepsFlexedIcon;
+  readonly shirtIcon = ShirtIcon;
+  readonly sunIcon = SunIcon;
+  readonly cloudIcon = CloudIcon;
+  readonly thermometerIcon = ThermometerIcon;
+  readonly dumbbellIcon = DumbbellIcon;
+  readonly phoneCallIcon = PhoneCallIcon;
 
-  private route = inject(ActivatedRoute);
+    public listaEmojis = [
+    this.fileIcon,
+    this.pawPrintIcon,
+    this.houseIcon,
+    this.hamIcon,
+    this.notebookIcon,
+    this.pencilIcon,
+    this.circleDollarSignIcon,
+    this.userRoundIcon,
+    this.bicepsFlexedIcon,
+    this.shirtIcon,
+    this.sunIcon,
+    this.cloudIcon,
+    this.thermometerIcon,
+    this.dumbbellIcon,
+    this.phoneCallIcon,
+  ];
 
+  // CODIGO EN EL HTML DE ESTE COMPONENTE, EXPLICACIÓN DE TODO
+
+  private autenticacion = inject(Autenticacion);
   private tareasData = inject(TareasData);
-
+  
+  public router = inject(Router);
+  private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
+  
+  public loading = signal<boolean>(true);
+  public pickerEmoji = signal<boolean>(false);
 
   formulario = this.fb.group({
     titulo: ['',[Validators.required]],
     descripcion: [''],
     prioridad: ['',[Validators.required]],
-    emoji: ['',[Validators.required]]
+    fechaVencimiento: [''],
+    emoji: ['',[Validators.required]],
+    completado: [false]
   });
 
   // formulario = this.fb.group({
@@ -47,14 +109,19 @@ export default class Formulario {
 
     if(idRecibido){
       const valoresTareaID = this.tareasData.obtenerTareaID(idRecibido).then((valores) => {
-        console.log(valores);
 
         this.formulario.patchValue({
           titulo: valores?.titulo,
           descripcion: valores?.descripcion,
           prioridad: valores?.prioridad,
-          emoji: valores?.emoji
-        })
+          fechaVencimiento : valores?.fechaVencimiento,
+          emoji: valores?.emoji,
+          completado: valores?.completado
+        });
+
+        console.log(this.formulario.value)
+
+        this.loading.set(false);
       });
 
       this.IDtareaItem.set(idRecibido);
@@ -72,11 +139,13 @@ export default class Formulario {
       console.log('NO se encontro existencía de dicho emoji.');
     }
 
-    this.mostrarPicker.set(false);
+    // this.mostrarPicker.set(false);
+    // this.pickerEmoji.set(false);
   }
 
   activadorPicker(){
-    this.mostrarPicker.set(!this.mostrarPicker());
+    this.pickerEmoji.set(!this.pickerEmoji());
+    console.log(this.pickerEmoji());
   }
 
   crearTarea(){
@@ -86,11 +155,11 @@ export default class Formulario {
 
       const valoresFecha : tarea = {
         ...valores,
-        fechaCreacion: Date.now()
+        fechaCreacion: Date.now(),
+        idUsuario: this.autenticacion.usuarioActual(),
       } as tarea;
 
       this.tareasData.agregarTarea(valoresFecha);
-      // console.log('Nuevamente');
       this.router.navigate(['/tareas']);
 
     } else{

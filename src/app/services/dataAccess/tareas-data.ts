@@ -1,11 +1,12 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, addDoc, getDocs ,collectionData, query, orderBy } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, getDocs ,collectionData, query, orderBy, where } from '@angular/fire/firestore';
 import { tarea } from '../../interfaces/tarea.interface';
 
 import { map, Observable, tap } from 'rxjs';
 // import { doc, getDoc } from 'firebase/firestore';
 
 import { doc, getDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { Autenticacion } from '../auth/autenticacion';
 
 
 @Injectable({
@@ -13,13 +14,16 @@ import { doc, getDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 })
 export class TareasData {
   
+  private autenticacion = inject(Autenticacion);
   private firestore = inject(Firestore);
 
   agregarTarea(nuevaTarea : tarea){
+    console.log(nuevaTarea);
     const tareasRef = collection(this.firestore, 'tareas');
     return addDoc(tareasRef, nuevaTarea);
   }
 
+  // Función collectionData no funciona correctamente, nos da error tipo doble SDK.
   obtenerTareas(): Observable<tarea[]> {
     const tareasRef = collection(this.firestore, 'tareas');
     
@@ -32,18 +36,34 @@ export class TareasData {
     );
   }
 
-  async obtenerTareasLista(){
-    const query = await getDocs(collection(this.firestore, 'tareas'));
-    
-    const tareas = query.docs.map((doc) => {
-      return {
-        id: doc.id,
-        ...doc.data()
-      }
-    })
+  async obtenerTareasLista() : Promise<any> {
+    const userUID = this.autenticacion.usuarioActual();
 
-    // console.log(tareas);
-    return tareas;
+    if(userUID){
+      try{
+
+        const tareasRef = collection(this.firestore, 'tareas');
+
+        const q = query(tareasRef, where('idUsuario','==',userUID));
+
+        const querySnapshot = await getDocs(q);
+
+        const tareas = querySnapshot.docs.map((doc) => {
+          
+          
+          return {
+            id: doc.id,
+            ...doc.data()
+          }
+        });
+
+        return tareas;
+
+      }catch(e){
+        console.error(e);
+        throw e;
+      }
+    }
   }
 
   async obtenerTareaID(id : string){
@@ -53,7 +73,7 @@ export class TareasData {
     const snapshot = await(getDoc(tareaRef));
 
     if(snapshot.exists()){
-      console.log(snapshot.id);
+
       return{
         id: snapshot.id,
         ...snapshot.data()
@@ -67,16 +87,13 @@ export class TareasData {
     return;
   }
 
-  async editarTareaID(id : string,tareaEditada : tarea){
+  async editarTareaID(id : string,tareaEditada ?: tarea){
     try{
-      console.log('Tarea editada: ');
-      console.log(tareaEditada);
-  
       const tareaRef = doc(this.firestore, 'tareas', id);
-  
+      
       await updateDoc(tareaRef,{ ...tareaEditada})
-      console.log('Tarea actualizada con éxito.');
-      console.log(tareaEditada);
+
+      console.log(`Tarea actualizada con exito.`);
 
     } catch(e) {
       console.log(e);

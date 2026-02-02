@@ -34,12 +34,9 @@ export const publicGuard = () => {
     map((user) => {
 
       if(user){
-        console.log('esta logeado');
         router.navigate(['/tareas']);
         return false;
       }
-
-      console.log('NOOO Esta logeado');
       return true;
 
     })

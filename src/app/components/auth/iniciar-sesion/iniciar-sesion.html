@@ -26,6 +26,10 @@
         <small>La contraseña es obligatoria</small>
       }
 
+      @if(this.loginForm.get('password')?.errors?.['minlength'] && this.loginForm.touched){
+        <small>La contraseña es incorrecta</small>
+      }
+
     </div>
 
     <input type="submit" value="Iniciar Sesión">

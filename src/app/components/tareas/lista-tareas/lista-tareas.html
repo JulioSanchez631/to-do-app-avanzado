@@ -11,29 +11,35 @@
   <h2>Filtros</h2>
 
   <form class="filtros-formulario">
-    <select id="prioridad">
-      <!-- <button><selectedcontent>g</selectedcontent></button> -->
+    <select #priori id="prioridad">
+
+      <option value="todos">Todas</option>
       <option value="alta">Alta</option>
       <option value="media">Media</option>
       <option value="baja">Baja</option>
     </select>
 
-    <select id="estado">
+    <select #state  id="estado">
+      <option value="todas">Todas</option>
       <option value="completadas">Completadas</option>
       <option value="pendientes">Pendientes</option>
-      <option value="todas">Todas</option>
     </select>
 
-    <input type="submit" value="Filtrar">
+    <input type="button" value="Filtrar" (click)="ejecutarFiltrado()">
   </form>
+
+  @if(this.loading()){
+    <app-loading></app-loading>
+  }
 
   <ul class="lista-tareas">
 
-    @for(tarea of tareas(); track tarea.id){
+<!-- <i-lucide name="house" [size]="48" color="red" [strokeWidth]="1"></i-lucide> -->
 
-      <li class="item-tarea" [routerLink]="['/tareas/edit' , tarea.id]">
+    @for(tarea of this.tareas(); track tarea.id){
+
+      <li class="item-tarea {{ tarea.prioridad }}" [routerLink]="['/tareas/edit' , tarea.id]">
         <span>
-        <!-- <emoji-mart set="apple"></emoji-mart> -->
         {{ tarea.emoji }}
       </span>
       <p>{{ tarea.titulo }}</p>

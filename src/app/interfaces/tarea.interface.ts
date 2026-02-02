@@ -12,6 +12,9 @@ export interface tarea {
   titulo : string,   
   descripcion ?: string, 
   prioridad : 'alta' | 'media' | 'baja', 
+  fechaVencimiento : string,
   emoji : string,  
-  fechaCreacion : number 
+  fechaCreacion : number,
+  idUsuario: string,
+  completado: boolean
 }

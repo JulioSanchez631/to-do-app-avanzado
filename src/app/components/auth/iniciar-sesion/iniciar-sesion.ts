@@ -1,8 +1,11 @@
-import { Component, inject, NgZone } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from'@angular/forms';
 import { Autenticacion } from '../../../services/auth/autenticacion';
 import { Router, RouterLink } from '@angular/router';
 import { map, take } from 'rxjs';
+import { Console } from 'console';
+
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-iniciar-sesion',
@@ -14,7 +17,8 @@ export default class IniciarSesion {
 
   private router = inject(Router);
   private authServicio = inject(Autenticacion);
-  private ngZone = inject(NgZone);
+
+  public credencialError = signal<boolean>(false);
 
   private formBuilder = inject(FormBuilder);
   
@@ -23,7 +27,7 @@ export default class IniciarSesion {
     password: ['', [Validators.required, Validators.minLength(6)]]
   })
 
-  enviar(e : Event){
+  async enviar(e : Event){
 
     if(this.loginForm.valid){
 
@@ -32,15 +36,35 @@ export default class IniciarSesion {
 
       if(typeof email == 'string' && typeof pwd == 'string'){
         
-          this.authServicio.iniciarSesion(email, pwd).then(() => {
+        console.log('EJECUTADO');
+        try{
+          await this.authServicio.iniciarSesion(email, pwd).then(() => {
             this.router.navigate(['/tareas']);
           });
+
+          toast.success('Se inicio sesión correctamente', {
+            class: 'toast-verde'
+          });
+        
+        }catch(e){
+          this.credencialError.set(true);
+
+          toast.error('Credenciales incorrectas', {
+            
+            class: 'toast-rojo'
+
+            });
+          
+        }
         
       }
 
 
     }else if(this.loginForm.invalid){
+
       this.loginForm.markAllAsTouched();
+      console.log('Invalido');
+    
     }
   }
 

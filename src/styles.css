@@ -21,3 +21,13 @@ body{
 img{
   width: 100%;
 }
+
+.toast-rojo {
+  color: #d32f2f !important;
+  font-weight: bold;
+}
+
+.toast-verde{
+  color: #37d32f !important;
+  font-weight: bold;
+}

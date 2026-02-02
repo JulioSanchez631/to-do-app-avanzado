@@ -3,12 +3,16 @@ import { RouterOutlet } from '@angular/router';
 
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
+import { toast, NgxSonnerToaster } from 'ngx-sonner';
+
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NgxSonnerToaster],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
   protected readonly title = signal('ToDoAppAvanzado');
+
+
 }

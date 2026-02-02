@@ -8,8 +8,6 @@
   
   <form [formGroup]="formulario">
 
-    <!--  (click)="crearTarea()"  -->
-
     <div class="inputs-contenedor">
 
       <input formControlName="titulo" type="text" placeholder="Título...">
@@ -38,25 +36,103 @@
     </div>
 
 
-    <div class="inputs-contenedor">
-      <input type="date" disabled>
+    <div class="wrapper-inputs">
+
+      <div class="inputs-contenedor">
+        <button type="button" (click)="fechaOculta.showPicker()" class="boton-calendario">
+
+          @if(fechaOculta.value){
+            {{ fechaOculta.value }}
+          }@else{
+            <span class="material-symbols-outlined">
+                calendar_month
+              </span>
+          }
+
+
+        </button>
+
+        <input 
+        type="date"
+        #fechaOculta
+        formControlName="fechaVencimiento"
+        class="modal-calendario"
+        >
+      </div>
+    
+      <div class="inputs-contenedor input-emoji">
+
+        <input type="button" value="Emojis" class="input-emoji" (click)="activadorPicker()">
+
+        <!-- <lucide-angular [img]="fileIcon" class="my-icon"></lucide-angular> -->
+      </div>
+
+      @if(this.pickerEmoji()){
+          <div class="picker-emoji-panel">
+            
+            <!--
+            
+            Vas a retomar esto el lunes, ya mostramos los emojis, en lo que es el panel del picker, ahora, lo que vas a hacer es estilar bien el Picker, para que se vean de buen tamaño los emojis, y se haga scroll y todo el diseño correspondiente, y vas a hacer la funcionalidad de que cuando se vaya a elegir uno, a tráves de un botón o lo que tu pienses que es mejor, se vaya a el input del formulario, y listo, aquí entrara un dilema, ya que para mostrar los emojis, se hace a tráves de unaas constante, pero tu solo podria guardar string, entonces, me imagino que ahi aplicaremos un array de 
+            de equivalencias, tipo:
+
+            equivalencias = [
+              { emojideFirebase: 'fileIcon', equivalencia: this.fileIcon }
+            ]
+
+            También otro reto, es como vas a agarrar el valor que seleccionaste en el picker para mandarlo a el campode del formulario, es decir, al campo emoji
+
+            formulario = this.fb.group({
+              titulo: ['',[Validators.required]],
+              descripcion: [''],
+              prioridad: ['',[Validators.required]],
+              fechaVencimiento: [''],
+              emoji: ['',[Validators.required]],
+              completado: [false]
+            });
+
+            Y también, como vas a activar cada emoji, para que cuando le des click, se haga el evento con dicho dato del emoji, siento que lo mejor seria envolver a el lucide-angular en un button, o colocar el (click) directamente en el lucide-angular, ya es cuestion de debatir.
+
+            Dejo todas estas anotaciones, ya que retomaras el código en Lunes.
+
+            -->
+
+            @for(emoji of this.listaEmojis; track emoji){
+              <lucide-angular [img]="emoji" class="my-icon"></lucide-angular>
+            }
+
+          </div>
+        }
 
     </div>
-  
-    <div class="inputs-contenedor input-emoji">
 
-      <input 
-      type="text"
-      formControlName="emoji"
-      (click)="activadorPicker()" readonly
-      placeholder="Elegi un emoji...">
-      @if(this.formulario.get('emoji')?.hasError('required') && this.formulario.touched){
-        <small>Emoji es requerido</small>
-      }
-
-    </div>
 
     @if(this.IDtareaItem()){
+      <div class="inputs-contenedor">
+        <!-- CheckBox HTML desing -->
+        <!-- From Uiverse.io by Shoh2008 --> 
+        <div class="checkbox-wrapper-12">
+          <div class="cbx">
+            <input checked="" formControlName="completado" type="checkbox" id="cbx-12">
+            <label for="cbx-12"></label>
+            <svg fill="none" viewBox="0 0 15 14" height="14" width="15">
+              <path d="M2 8.36364L6.23077 12L13 2"></path>
+            </svg>
+          </div>
+          
+          <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="goo-12">
+                <feGaussianBlur result="blur" stdDeviation="4" in="SourceGraphic"></feGaussianBlur>
+                <feColorMatrix result="goo-12" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" mode="matrix" in="blur"></feColorMatrix>
+                <feBlend in2="goo-12" in="SourceGraphic"></feBlend>
+              </filter>
+            </defs>
+          </svg>
+        </div>
+
+
+      </div>
+      
       <div class="inputs-contenedor eliminar-tarea-contenedor" (click)="eliminarTarea()">
         <button>Eliminar tarea</button>
       </div>
@@ -94,3 +170,6 @@
   </form>
 
 </section>
+@if(this.IDtareaItem() && this.loading()){
+  <app-loading></app-loading>
+}
