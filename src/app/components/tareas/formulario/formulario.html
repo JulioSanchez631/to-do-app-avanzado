@@ -62,9 +62,20 @@
     
       <div class="inputs-contenedor input-emoji">
 
-        <input type="button" value="Emojis" class="input-emoji" (click)="activadorPicker()">
+        @if(this.formulario.get('emoji')?.value){
+          
+          <div (click)="activadorPicker()" class="input-emoji">
+            <lucide-angular [img]="mostrar()" class="my-icon" size="24"></lucide-angular>  
+          </div>
 
-        <!-- <lucide-angular [img]="fileIcon" class="my-icon"></lucide-angular> -->
+        }@else{
+
+          <div for="" (click)="activadorPicker()" class="input-emoji">
+            <p>Emojis</p>
+          </div>
+
+        }
+
       </div>
 
       @if(this.pickerEmoji()){
@@ -96,8 +107,8 @@
 
             -->
 
-            @for(emoji of this.listaEmojis; track emoji){
-              <lucide-angular [img]="emoji" class="my-icon"></lucide-angular>
+            @for(item of this.listaEquivalencias; track item){
+              <lucide-angular [img]="item.icono" class="my-icon" size="30" (click)="valorEmoji(item)"></lucide-angular>
             }
 
           </div>

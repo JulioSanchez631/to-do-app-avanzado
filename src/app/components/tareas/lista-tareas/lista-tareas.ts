@@ -26,7 +26,8 @@ import { LucideAngularModule,
   CloudIcon,
   ThermometerIcon /* Termometro */,
   DumbbellIcon /* Pesas */,
-  PhoneCallIcon
+  PhoneCallIcon,
+  BanIcon /* Icono de ban, lo utilizaremos para decir que no hay sticker valido */
 } 
 from 'lucide-angular';
 
@@ -54,6 +55,26 @@ export default class ListaTareas {
   readonly dumbbellIcon = DumbbellIcon;
   readonly phoneCallIcon = PhoneCallIcon;
 
+  readonly banIcon = BanIcon;
+
+    listaEquivalencias = [
+    {nombre: 'fileIcon', icono: this.fileIcon},
+    {nombre: 'pawPrintIcon', icono: this.pawPrintIcon},
+    {nombre: 'houseIcon', icono: this.houseIcon},
+    {nombre: 'hamIcon', icono: this.hamIcon},
+    {nombre: 'notebookIcon', icono: this.notebookIcon},
+    {nombre: 'pencilIcon', icono: this.pencilIcon},
+    {nombre: 'circleDollarSignIcon', icono: this.circleDollarSignIcon},
+    {nombre: 'userRoundIcon', icono: this.userRoundIcon},
+    {nombre: 'bicepsFlexedIcon', icono: this.bicepsFlexedIcon},
+    {nombre: 'shirtIcon', icono: this.shirtIcon},
+    {nombre: 'sunIcon', icono: this.sunIcon},
+    {nombre: 'cloudIcon', icono: this.cloudIcon},
+    {nombre: 'thermometerIcon', icono: this.thermometerIcon},
+    {nombre: 'dumbbellIcon', icono: this.dumbbellIcon},
+    {nombre: 'phoneCallIcon', icono: this.phoneCallIcon},
+  ]
+
   loading = signal<boolean>(true);
 
   authServicio = inject(Autenticacion);
@@ -77,9 +98,17 @@ export default class ListaTareas {
       this.loading.set(false);
 
       this.tareas.set(listaTareas);
-
-      console.log(this.tareas());
     }
+  }
+
+  mostrarEmoji(nombre : string){
+    for(const item of this.listaEquivalencias){
+      if(item.nombre == nombre){
+        return item.icono;
+      }
+    }
+
+    return this.banIcon;
   }
 
   cerrarSesion(){

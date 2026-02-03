@@ -124,15 +124,22 @@ div.contenedor-opciones{
 }
 
 .picker-emoji-panel{
-  position: absolute;
+  display:flex;
+  position: absolute; 
   top:5%;
   left:5%;
   width: 90%;
-  height: 60%;
+  height: 40%;
+  max-height: 400px;
   padding: 12px;
   background-color: var(--color-0);
   border-radius: 12px;
   border:1px solid black;
+  z-index: 1;
+  align-content: start;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
 }
 
 .inputs-contenedor.eliminar-tarea-contenedor button{

@@ -13,9 +13,6 @@ export class FiltroServicio {
 
     const tareas = await this.tareasData.obtenerTareasLista();
 
-    console.log(`Prioridad ${prioridad}`);
-    console.log(`Estado: ${estado}`);
-
     const tareasPrioridad = tareas.filter((tarea : tarea) => {
       if(prioridad == 'todos'){
         return tarea;

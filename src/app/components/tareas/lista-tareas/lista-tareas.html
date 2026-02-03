@@ -34,14 +34,15 @@
 
   <ul class="lista-tareas">
 
-<!-- <i-lucide name="house" [size]="48" color="red" [strokeWidth]="1"></i-lucide> -->
-
     @for(tarea of this.tareas(); track tarea.id){
 
       <li class="item-tarea {{ tarea.prioridad }}" [routerLink]="['/tareas/edit' , tarea.id]">
-        <span>
-        {{ tarea.emoji }}
-      </span>
+        <!-- <span>
+        {{ mostrarEmoji(tarea.emoji) }}
+      </span> -->
+
+      <lucide-angular [img]="mostrarEmoji(tarea.emoji)" class="my-icon" size="24"></lucide-angular>
+      
       <p>{{ tarea.titulo }}</p>
     </li>
 

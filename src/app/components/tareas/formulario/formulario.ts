@@ -56,6 +56,7 @@ export default class Formulario {
   readonly dumbbellIcon = DumbbellIcon;
   readonly phoneCallIcon = PhoneCallIcon;
 
+  /*
     public listaEmojis = [
     this.fileIcon,
     this.pawPrintIcon,
@@ -73,6 +74,25 @@ export default class Formulario {
     this.dumbbellIcon,
     this.phoneCallIcon,
   ];
+  */
+
+  listaEquivalencias = [
+    {nombre: 'fileIcon', icono: this.fileIcon},
+    {nombre: 'pawPrintIcon', icono: this.pawPrintIcon},
+    {nombre: 'houseIcon', icono: this.houseIcon},
+    {nombre: 'hamIcon', icono: this.hamIcon},
+    {nombre: 'notebookIcon', icono: this.notebookIcon},
+    {nombre: 'pencilIcon', icono: this.pencilIcon},
+    {nombre: 'circleDollarSignIcon', icono: this.circleDollarSignIcon},
+    {nombre: 'userRoundIcon', icono: this.userRoundIcon},
+    {nombre: 'bicepsFlexedIcon', icono: this.bicepsFlexedIcon},
+    {nombre: 'shirtIcon', icono: this.shirtIcon},
+    {nombre: 'sunIcon', icono: this.sunIcon},
+    {nombre: 'cloudIcon', icono: this.cloudIcon},
+    {nombre: 'thermometerIcon', icono: this.thermometerIcon},
+    {nombre: 'dumbbellIcon', icono: this.dumbbellIcon},
+    {nombre: 'phoneCallIcon', icono: this.phoneCallIcon},
+  ]
 
   // CODIGO EN EL HTML DE ESTE COMPONENTE, EXPLICACIÓN DE TODO
 
@@ -95,10 +115,6 @@ export default class Formulario {
     completado: [false]
   });
 
-  // formulario = this.fb.group({
-  //   titulo: new FormControl<string>('', {nonNullable: t})
-  // })
-
   mostrarPicker = signal(false);
 
   public IDtareaItem = signal<string | null>(null);
@@ -119,33 +135,40 @@ export default class Formulario {
           completado: valores?.completado
         });
 
-        console.log(this.formulario.value)
-
         this.loading.set(false);
       });
 
       this.IDtareaItem.set(idRecibido);
       // Recibir valor de fecha de creacion, aunque verifica bien la logica, ya que dicen que si no modificas valores, se mantienen igual en firebase, es decir, tal vez no sea necesario capturar el valor de creacion del documento, ya que ese va a quedar intacto al momento de la actulización.
+      
     }
   }
 
-  valorEmoji(e : any){
+  mostrar(){
 
-    if(e.emoji.native){
-      this.formulario.patchValue({
-      emoji: e.emoji.native
-      });
-    } else{
-      console.log('NO se encontro existencía de dicho emoji.');
+    for(const item of this.listaEquivalencias){
+      if(item.nombre == this.formulario.get('emoji')?.value){
+        return item.icono;
+      }
     }
+    
+    return;
+  }
 
-    // this.mostrarPicker.set(false);
-    // this.pickerEmoji.set(false);
+  valorEmoji(e : any){
+    
+    this.formulario.patchValue({
+      emoji: e.nombre
+    });
+
+    this.pickerEmoji.set(false);
+  
+    // console.log(this.formulario.get('emoji')?.value);
   }
 
   activadorPicker(){
     this.pickerEmoji.set(!this.pickerEmoji());
-    console.log(this.pickerEmoji());
+    // console.log(this.pickerEmoji());
   }
 
   crearTarea(){
